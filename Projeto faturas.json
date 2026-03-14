@@ -1,0 +1,626 @@
+{
+  "name": "Projeto faturas",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "readStatus": "unread"
+        },
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        0
+      ],
+      "id": "ee8ebf34-230f-4ed7-9c30-8418a25e0a5e",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6C2ysOBDDWfGgE2B",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "af6ce4f3-569b-4e53-be8a-8b5e55e9f980",
+              "name": "data",
+              "value": "attachment_0",
+              "type": "binary"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        -144
+      ],
+      "id": "07e48501-e967-4f01-9d21-0ee6960e0da9",
+      "name": "Edit Fields",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {
+          "password": "09054"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        -272
+      ],
+      "id": "76a7ffcc-e053-4888-83ba-2b59a0584c81",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.text }}",
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"tipo_doc\": {\n  \"type\": \"string\",\n  \"enum\": [\"boleto\", \"nota_fiscal\", \"fatura\", \"fatura/boleto\", \"nota_fiscal/boleto\"],\n  \"description\": \"Analise TODAS as páginas do documento e classifique: 1) 'boleto' se o documento inteiro for apenas um boleto bancário com linha digitável, sem outras páginas com detalhamento de serviços ou nota fiscal. 2) 'nota_fiscal' se o documento inteiro for apenas uma nota fiscal ou nota de débito, sem linha digitável bancária. 3) 'fatura' se o documento for apenas uma cobrança de serviços sem linha digitável e sem nota fiscal. 4) 'fatura/boleto' se o documento se identificar explicitamente como fatura (ex: 'FATURA UNIFICADA', 'SUA FATURA', 'FATURA DETALHADA') em uma ou mais páginas E contiver boleto com linha digitável como forma de pagamento. 5) 'nota_fiscal/boleto' se a primeira página for exclusivamente um boleto bancário avulso E a segunda página for uma nota fiscal ou NFCom separada, sem o documento se identificar como fatura.\"\n},\n    \"CNPJ_fornecedor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o CNPJ do fornecedor.\"\n    },\n    \"razao_social_fornecedor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a razão social do fornecedor.\"\n    },\n    \"razao_social_sacado\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a razão social do sacado (Inbrands ou Tommy).\"\n    },\n    \"CNPJ_sacado\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o CNPJ do sacado.\"\n    },\n    \"endereco_fatura\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o endereço completo do destinatário/sacado conforme consta na fatura, no formato: Logradouro, Número, Complemento (se houver), Bairro, CEP, Cidade, UF.\"\n    },\n    \"endereco_instalacao\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne o endereço do local de instalação ou entrega somente se estiver explicitamente destacado no documento como 'Endereço de Instalação', 'Local de Entrega' ou similar, no formato: Logradouro, Número, Complemento (se houver), Bairro, CEP, Cidade, UF. Se não houver, retorne null.\"\n    },\n    \"numero_fatura/numero NF\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o número do documento seguindo esta prioridade: 1) Se existir o campo 'Número da Fatura' ou 'Nº da Fatura', retorne esse valor. 2) Se não existir, retorne o número identificado como 'NOTA FISCAL Nº', 'Nº NFCOM' ou similar. Ignore campos chamados 'Código', 'Número da Conta', 'Nosso Número', 'Número Doc.', 'Número do Documento' e qualquer número associado ao boleto bancário.\"\n    },\n    \"emissao\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a data de emissão.\"\n    },\n    \"valor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o valor total a pagar.\"\n    },\n    \"vencimento\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a data de vencimento.\"\n    },\n    \"referencia\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne a referência quando estiver destacada na fatura ou nota.\"\n    },\n    \"contrato\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne o contrato quando estiver destacado na fatura ou nota.\"\n    },\n    \"codigo_barra\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne apenas os números do código de barras da fatura quando estiver presente.\"\n    }\n  },\n  \"required\": [\n    \"CNPJ_fornecedor\",\n    \"razao_social_fornecedor\",\n    \"razao_social_sacado\",\n    \"CNPJ_sacado\",\n    \"endereco_fatura\",\n    \"numero_fatura\",\n    \"emissao\",\n    \"valor\",\n    \"vencimento\",\n    \"contrato\",\n    \"referencia\",\n    \"contrato\",\n    \"codigo_barra\"\n  ]\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        -272
+      ],
+      "id": "3edc76fa-5fad-4298-94f8-8ef5a9c98d98",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "content": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"cnpj\": {\n      \"type\": \"string\",\n      \"description\": \"Extrair campo CNPJ/CPF do destinatario\"\n    },\n    \"emissor\": {\n      \"type\": \"string\",\n      \"description\": \"Extrair o nome completo do emissor conforme consta no documento.\"\n    },\n    \"itens\": {\n      \"type\": \"array\",\n      \"description\": \"\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"nome_item\": {\n            \"type\": \"string\",\n            \"description\": \"Extrair a descrição completa do produto ou serviço exatamente como aparece no documento.\"\n          },\n          \"ncm\": {\n            \"type\": \"string\",\n            \"description\": \"Extrair o campo NCM\"\n          },\n          \"cst\": {\n            \"type\": \"string\",\n            \"description\": \"Extrair o campo CST ou O/CST ou CSOSN\"\n          },\n          \"CFOP\":{\n            \"type\" : \"string\",\n            \"description\" : \"Extrair o campo CFOP\"\n          }\n        },\n        \"required\": [\n          \"nome_item\",\n          \"ncm\",\n          \"cst\",\n          \"CFOP\"\n        ]\n      }\n    }\n  },\n  \"required\": [\n    \"cnpj\",\n    \"emissor\",\n    \"itens\"\n  ]\n}",
+        "height": 1040,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1520,
+        -864
+      ],
+      "id": "de520a7a-1a0d-4ce3-a1ce-42bca750e5f2",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        736,
+        -80
+      ],
+      "id": "cdc74634-b6ab-4d04-a2e0-256fff867eb1",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "jbgPsIgjGxT5o9y2",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51918d1c-f13f-4287-96f4-18168b51eccb",
+              "name": "tipo_doc",
+              "value": "={{ $json.output.tipo_doc }}",
+              "type": "string"
+            },
+            {
+              "id": "a7869451-8395-4d59-b56b-aa6e45205f9c",
+              "name": "CNPJ_fornecedor",
+              "value": "={{ $json.output.CNPJ_fornecedor }}",
+              "type": "string"
+            },
+            {
+              "id": "2d026e28-d4f7-495a-8bf5-1b7f6b4cd5c8",
+              "name": "razao_social_fornecedor",
+              "value": "={{ $json.output.razao_social_fornecedor }}",
+              "type": "string"
+            },
+            {
+              "id": "7950805b-2770-4070-81db-af7f0460d62e",
+              "name": "razao_social_sacado",
+              "value": "={{ $json.output.razao_social_sacado }}",
+              "type": "string"
+            },
+            {
+              "id": "09bb843b-aa10-4814-84f2-02f8af68e9d6",
+              "name": "CNPJ_sacado",
+              "value": "={{ $json.output.CNPJ_sacado }}",
+              "type": "string"
+            },
+            {
+              "id": "91dcffdf-3090-4822-8cd3-12bfdb15510f",
+              "name": "endereco_fatura",
+              "value": "={{ $json.output.endereco_fatura }}",
+              "type": "string"
+            },
+            {
+              "id": "b01d18d8-3d14-4a38-924e-f9b6fda5936c",
+              "name": "endereco_instalacao",
+              "value": "={{ $json.output.endereco_instalacao }}",
+              "type": "string"
+            },
+            {
+              "id": "a5961510-fc3f-4bac-b939-befe864cc506",
+              "name": "numero_fatura/numero NF",
+              "value": "={{ $json.output['numero_fatura/numero NF'] }}",
+              "type": "string"
+            },
+            {
+              "id": "702a1fac-ea2a-4b73-b0e1-3ea5cc06f944",
+              "name": "emissao",
+              "value": "={{ $json.output.emissao }}",
+              "type": "string"
+            },
+            {
+              "id": "da55adc1-c4c5-4a5b-bb81-54b02d06a4c0",
+              "name": "valor",
+              "value": "={{ $json.output.valor }}",
+              "type": "string"
+            },
+            {
+              "id": "0c2715ab-6be1-4039-8eda-b69c708ad3c0",
+              "name": "vencimento",
+              "value": "={{ $json.output.vencimento }}",
+              "type": "string"
+            },
+            {
+              "id": "a1cdeeda-116d-42f0-9f8d-6af106f93c5e",
+              "name": "referencia",
+              "value": "={{ $json.output.referencia }}",
+              "type": "string"
+            },
+            {
+              "id": "cdf72f5a-9f38-4305-a513-87824772bf7a",
+              "name": "contrato",
+              "value": "={{ $json.output.contrato }}",
+              "type": "string"
+            },
+            {
+              "id": "c0bebaad-980d-425d-a55b-0aaa997475b3",
+              "name": "codigo_barra",
+              "value": "={{ $json.output.codigo_barra }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1024,
+        -272
+      ],
+      "id": "813eae15-ef01-44a8-80aa-20a47e93be6a",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        240
+      ],
+      "id": "9bebd0cc-7997-4c32-b538-ed7596e1cb95",
+      "name": "Mark a message as read",
+      "webhookId": "312a8d6e-7788-4aa7-9abd-a05fd47af6a9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6C2ysOBDDWfGgE2B",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Classifique o documento seguindo esta prioridade: 1) 'boleto' se houver linha digitável bancária. 2) 'nota_fiscal' se o documento tiver caráter fiscal, ou seja, possuir campos como Inscrição Municipal, Inscrição Estadual, chave NF-e, ou for intitulado como Nota Fiscal, Nota de Débito, Nota de Crédito, DANFE ou similar. 3) 'fatura' apenas se não se enquadrar em nenhum dos casos anteriores."
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        96,
+        -1056
+      ],
+      "id": "84340252-37f7-48f6-a28e-51afd8d5c4e7",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "\"tipo_doc\": {\n  \"type\": \"string\",\n  \"description\": \"Classifique pelo PROPÓSITO PRINCIPAL do documento, não pelos elementos secundários. Use esta lógica: 1) 'boleto' se o propósito principal for exclusivamente a cobrança bancária, ou seja, o documento existe apenas para pagamento via código de barras, sem descrição detalhada de serviços ou nota fiscal associada. 2) 'nota_fiscal' se o propósito principal for fiscal, ou seja, o documento é emitido para fins tributários (NF-e, DANFE, Nota de Débito, NFCom) mesmo que contenha boleto embutido. 3) 'fatura' se o propósito principal for apresentar o detalhamento de serviços ou produtos consumidos com valor e vencimento, mesmo que contenha nota fiscal ou boleto como forma de pagamento.\"\n},"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        128,
+        -832
+      ],
+      "id": "485fa98b-e53d-4415-a052-51601bca61eb",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1dEUTUFakEfUOQX_CmW2S1qilnruEnF7u-BhsvAO9ahg",
+          "mode": "list",
+          "cachedResultName": "Faturas operadoras",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dEUTUFakEfUOQX_CmW2S1qilnruEnF7u-BhsvAO9ahg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Faturas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dEUTUFakEfUOQX_CmW2S1qilnruEnF7u-BhsvAO9ahg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Tipo documento": "={{ $json.tipo_doc }}",
+            "CNPJ fornecedor": "={{ $json.CNPJ_fornecedor }}",
+            "Razão Social do Fornecedor": "={{ $json.razao_social_fornecedor }}",
+            "Razão Social do Sacado": "={{ $json.razao_social_sacado }}",
+            "CNPJ do sacado": "={{ String($json.CNPJ_sacado)}}",
+            "Endereço da Fatura": "={{ $json.endereco_fatura }}",
+            "Numero da Fatura/Nota Fiscal": "={{ $json['numero_fatura/numero NF'] }}",
+            "Data de Emissão do Documento": "={{ $json.emissao }}",
+            "Valor total a pagar": "={{ $json.valor }}",
+            "Data de Vencimento": "={{ $json.vencimento }}",
+            "Referência": "={{ $json.referencia }}",
+            "Contrato": "={{ $json.contrato }}",
+            "Código de barras da fatura": "={{ $json.codigo_barra }}",
+            "Endereço de Instalação": "={{ $json.endereco_instalacao }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Tipo documento",
+              "displayName": "Tipo documento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CNPJ fornecedor",
+              "displayName": "CNPJ fornecedor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Razão Social do Fornecedor",
+              "displayName": "Razão Social do Fornecedor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Razão Social do Sacado",
+              "displayName": "Razão Social do Sacado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CNPJ do sacado",
+              "displayName": "CNPJ do sacado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Endereço da Fatura",
+              "displayName": "Endereço da Fatura",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Endereço de Instalação",
+              "displayName": "Endereço de Instalação",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Numero da Fatura/Nota Fiscal",
+              "displayName": "Numero da Fatura/Nota Fiscal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data de Emissão do Documento",
+              "displayName": "Data de Emissão do Documento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Valor total a pagar",
+              "displayName": "Valor total a pagar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data de Vencimento",
+              "displayName": "Data de Vencimento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Referência",
+              "displayName": "Referência",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Contrato",
+              "displayName": "Contrato",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Código de barras da fatura",
+              "displayName": "Código de barras da fatura",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1424,
+        -272
+      ],
+      "id": "023decb3-3634-4ab1-9d19-33fbd444e26f",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8kdqwiZxQAl0uvOH",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "errorMessage": "WorkFlow encerrado"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        672,
+        48
+      ],
+      "id": "9b2d975c-f8be-4bca-840e-1b642f1fdc78",
+      "name": "Stop and Error"
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "message": "E-mail sem anexo.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        48
+      ],
+      "id": "422f34d4-6e34-4d27-a3b1-cb84b66753de",
+      "name": "Reply to a message",
+      "webhookId": "40bdd5f9-b198-4dd7-9c91-43ed7dd678ed",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6C2ysOBDDWfGgE2B",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        -272
+      ],
+      "id": "b88ab063-84f8-4ae7-9bc7-5a772b5fcfaf",
+      "name": "Limit"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Mark a message as read",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply to a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark a message as read": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reply to a message": {
+      "main": [
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "2b1c51cc-fed2-4a92-bb1c-82842102cbf9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a9dfd0acbb8262042acf20bd8e87246f186841e2cce4fb92bf2575b90748f88c"
+  },
+  "id": "o_p5ZrfZpiRtst9CXDDXU",
+  "tags": []
+}
