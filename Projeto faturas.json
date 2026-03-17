@@ -3,62 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "pollTimes": {
-          "item": [
-            {
-              "mode": "everyMinute"
-            }
-          ]
-        },
-        "simple": false,
-        "filters": {
-          "readStatus": "unread"
-        },
-        "options": {
-          "downloadAttachments": true
-        }
-      },
-      "type": "n8n-nodes-base.gmailTrigger",
-      "typeVersion": 1.3,
-      "position": [
-        48,
-        0
-      ],
-      "id": "ee8ebf34-230f-4ed7-9c30-8418a25e0a5e",
-      "name": "Gmail Trigger",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
-          "name": "Gmail account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "af6ce4f3-569b-4e53-be8a-8b5e55e9f980",
-              "name": "data",
-              "value": "attachment_0",
-              "type": "binary"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        256,
-        -144
-      ],
-      "id": "07e48501-e967-4f01-9d21-0ee6960e0da9",
-      "name": "Edit Fields",
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
         "operation": "pdf",
         "options": {
           "password": "09054"
@@ -67,11 +11,12 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1.1,
       "position": [
-        480,
-        -272
+        896,
+        480
       ],
-      "id": "76a7ffcc-e053-4888-83ba-2b59a0584c81",
-      "name": "Extract from File"
+      "id": "c54d6c5f-e760-43c6-8677-d6125ac2e41c",
+      "name": "Extract from File",
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -83,26 +28,11 @@
       "type": "@n8n/n8n-nodes-langchain.informationExtractor",
       "typeVersion": 1.2,
       "position": [
-        688,
-        -272
+        1568,
+        480
       ],
-      "id": "3edc76fa-5fad-4298-94f8-8ef5a9c98d98",
+      "id": "7190947f-ebc8-48ec-8add-4893fe1cb133",
       "name": "Information Extractor"
-    },
-    {
-      "parameters": {
-        "content": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"cnpj\": {\n      \"type\": \"string\",\n      \"description\": \"Extrair campo CNPJ/CPF do destinatario\"\n    },\n    \"emissor\": {\n      \"type\": \"string\",\n      \"description\": \"Extrair o nome completo do emissor conforme consta no documento.\"\n    },\n    \"itens\": {\n      \"type\": \"array\",\n      \"description\": \"\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"nome_item\": {\n            \"type\": \"string\",\n            \"description\": \"Extrair a descrição completa do produto ou serviço exatamente como aparece no documento.\"\n          },\n          \"ncm\": {\n            \"type\": \"string\",\n            \"description\": \"Extrair o campo NCM\"\n          },\n          \"cst\": {\n            \"type\": \"string\",\n            \"description\": \"Extrair o campo CST ou O/CST ou CSOSN\"\n          },\n          \"CFOP\":{\n            \"type\" : \"string\",\n            \"description\" : \"Extrair o campo CFOP\"\n          }\n        },\n        \"required\": [\n          \"nome_item\",\n          \"ncm\",\n          \"cst\",\n          \"CFOP\"\n        ]\n      }\n    }\n  },\n  \"required\": [\n    \"cnpj\",\n    \"emissor\",\n    \"itens\"\n  ]\n}",
-        "height": 1040,
-        "width": 544
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -1520,
-        -864
-      ],
-      "id": "de520a7a-1a0d-4ce3-a1ce-42bca750e5f2",
-      "name": "Sticky Note"
     },
     {
       "parameters": {
@@ -111,14 +41,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        736,
-        -80
+        1648,
+        704
       ],
-      "id": "cdc74634-b6ab-4d04-a2e0-256fff867eb1",
+      "id": "6c6f4b83-0149-4530-9dfc-0ef9abb1adf0",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "jbgPsIgjGxT5o9y2",
+          "id": "fI1w759unI7eXoch",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -218,58 +148,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1024,
-        -272
+        1920,
+        480
       ],
-      "id": "813eae15-ef01-44a8-80aa-20a47e93be6a",
+      "id": "6a83e9a5-a38a-4d67-8cbf-cbf316ef4996",
       "name": "Edit Fields1"
-    },
-    {
-      "parameters": {
-        "operation": "markAsRead",
-        "messageId": "={{ $json.id }}"
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.2,
-      "position": [
-        256,
-        240
-      ],
-      "id": "9bebd0cc-7997-4c32-b538-ed7596e1cb95",
-      "name": "Mark a message as read",
-      "webhookId": "312a8d6e-7788-4aa7-9abd-a05fd47af6a9",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
-          "name": "Gmail account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "content": "Classifique o documento seguindo esta prioridade: 1) 'boleto' se houver linha digitável bancária. 2) 'nota_fiscal' se o documento tiver caráter fiscal, ou seja, possuir campos como Inscrição Municipal, Inscrição Estadual, chave NF-e, ou for intitulado como Nota Fiscal, Nota de Débito, Nota de Crédito, DANFE ou similar. 3) 'fatura' apenas se não se enquadrar em nenhum dos casos anteriores."
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        96,
-        -1056
-      ],
-      "id": "84340252-37f7-48f6-a28e-51afd8d5c4e7",
-      "name": "Sticky Note1"
-    },
-    {
-      "parameters": {
-        "content": "\"tipo_doc\": {\n  \"type\": \"string\",\n  \"description\": \"Classifique pelo PROPÓSITO PRINCIPAL do documento, não pelos elementos secundários. Use esta lógica: 1) 'boleto' se o propósito principal for exclusivamente a cobrança bancária, ou seja, o documento existe apenas para pagamento via código de barras, sem descrição detalhada de serviços ou nota fiscal associada. 2) 'nota_fiscal' se o propósito principal for fiscal, ou seja, o documento é emitido para fins tributários (NF-e, DANFE, Nota de Débito, NFCom) mesmo que contenha boleto embutido. 3) 'fatura' se o propósito principal for apresentar o detalhamento de serviços ou produtos consumidos com valor e vencimento, mesmo que contenha nota fiscal ou boleto como forma de pagamento.\"\n},"
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        128,
-        -832
-      ],
-      "id": "485fa98b-e53d-4415-a052-51601bca61eb",
-      "name": "Sticky Note2"
     },
     {
       "parameters": {
@@ -443,51 +326,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1424,
-        -272
+        2384,
+        480
       ],
-      "id": "023decb3-3634-4ab1-9d19-33fbd444e26f",
+      "id": "1cd0cc9d-9a0d-4123-885a-8af7209d85d2",
       "name": "Append row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
+          "id": "VTPodq2TM8NkUoYY",
           "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "errorMessage": "WorkFlow encerrado"
-      },
-      "type": "n8n-nodes-base.stopAndError",
-      "typeVersion": 1,
-      "position": [
-        672,
-        48
-      ],
-      "id": "9b2d975c-f8be-4bca-840e-1b642f1fdc78",
-      "name": "Stop and Error"
-    },
-    {
-      "parameters": {
-        "operation": "reply",
-        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
-        "message": "E-mail sem anexo.",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.2,
-      "position": [
-        480,
-        48
-      ],
-      "id": "422f34d4-6e34-4d27-a3b1-cb84b66753de",
-      "name": "Reply to a message",
-      "webhookId": "40bdd5f9-b198-4dd7-9c91-43ed7dd678ed",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
-          "name": "Gmail account"
         }
       }
     },
@@ -496,54 +343,144 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        1232,
-        -272
+        2144,
+        480
       ],
-      "id": "b88ab063-84f8-4ae7-9bc7-5a772b5fcfaf",
+      "id": "0054773d-4430-4413-9686-f255cc828aed",
       "name": "Limit"
+    },
+    {
+      "parameters": {
+        "fileSelector": "/files/naoLidos/*",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        608
+      ],
+      "id": "d3461cb7-50f5-44c4-8038-2a3d11fbe871",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        608
+      ],
+      "id": "88996853-5b44-436b-b8bf-18cd8107d4df",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        608
+      ],
+      "id": "732607c2-ef43-4e43-a79a-9bfa1d22c712",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {
+          "password": "15505"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        560
+      ],
+      "id": "91e0d7c7-f8fc-4872-b18c-707eabfcb273",
+      "name": "Extract from File1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1344,
+        480
+      ],
+      "id": "30423803-06c7-49f4-8fc2-85b52a3a5904",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/files/lidos/{{ $json['Nome do arquivo'] }}",
+        "options": {
+          "append": false
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        2832,
+        672
+      ],
+      "id": "c419211d-e909-4d46-8cd7-d6f40be223c1",
+      "name": "Read/Write Files from Disk1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acda8add-3a5d-4fb7-ad2e-b443eb986d6a",
+              "name": "data",
+              "value": "={{ $node[\"Loop Over Items\"].binary.data }}",
+              "type": "binary"
+            },
+            {
+              "id": "1d64fb04-160e-4755-a60e-4dcc47067b34",
+              "name": "Nome do arquivo",
+              "value": "={{ $('Read/Write Files from Disk').item.json.fileName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2592,
+        480
+      ],
+      "id": "94c2f243-5862-4d9c-97c9-c9ca09af1880",
+      "name": "Edit Fields"
     }
   ],
   "pinData": {},
   "connections": {
-    "Gmail Trigger": {
+    "Extract from File": {
       "main": [
         [
           {
-            "node": "Mark a message as read",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "Extract from File",
+            "node": "Merge",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Reply to a message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Extract from File": {
-      "main": [
-        [
-          {
-            "node": "Information Extractor",
+            "node": "Extract from File1",
             "type": "main",
             "index": 0
           }
@@ -572,27 +509,11 @@
         ]
       ]
     },
-    "Mark a message as read": {
-      "main": [
-        []
-      ]
-    },
     "Edit Fields1": {
       "main": [
         [
           {
             "node": "Limit",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Reply to a message": {
-      "main": [
-        [
-          {
-            "node": "Stop and Error",
             "type": "main",
             "index": 0
           }
@@ -609,18 +530,107 @@
           }
         ]
       ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false
+    "binaryMode": "separate"
   },
-  "versionId": "2b1c51cc-fed2-4a92-bb1c-82842102cbf9",
+  "versionId": "6fc76cdd-0dab-4b19-aec6-be7759143971",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "a9dfd0acbb8262042acf20bd8e87246f186841e2cce4fb92bf2575b90748f88c"
+    "instanceId": "1e7948feed7ad6a9d739915ed2a5fb1a4448b6865bf0a3749eb9703dbe25ec1f"
   },
-  "id": "o_p5ZrfZpiRtst9CXDDXU",
+  "id": "OMTuM1fCXTW1ldDc",
   "tags": []
 }
