@@ -22,7 +22,7 @@
       "parameters": {
         "text": "={{ $json.text }}",
         "schemaType": "manual",
-        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"tipo_doc\": {\n  \"type\": \"string\",\n  \"enum\": [\"boleto\", \"nota_fiscal\", \"fatura\", \"fatura/boleto\", \"nota_fiscal/boleto\"],\n  \"description\": \"Analise TODAS as páginas do documento e classifique: 1) 'boleto' se o documento inteiro for apenas um boleto bancário com linha digitável, sem outras páginas com detalhamento de serviços ou nota fiscal. 2) 'nota_fiscal' se o documento inteiro for apenas uma nota fiscal ou nota de débito, sem linha digitável bancária. 3) 'fatura' se o documento for apenas uma cobrança de serviços sem linha digitável e sem nota fiscal. 4) 'fatura/boleto' se o documento se identificar explicitamente como fatura (ex: 'FATURA UNIFICADA', 'SUA FATURA', 'FATURA DETALHADA') em uma ou mais páginas E contiver boleto com linha digitável como forma de pagamento. 5) 'nota_fiscal/boleto' se a primeira página for exclusivamente um boleto bancário avulso E a segunda página for uma nota fiscal ou NFCom separada, sem o documento se identificar como fatura.\"\n},\n    \"CNPJ_fornecedor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o CNPJ do fornecedor.\"\n    },\n    \"razao_social_fornecedor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a razão social do fornecedor.\"\n    },\n    \"razao_social_sacado\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a razão social do sacado (Inbrands ou Tommy).\"\n    },\n    \"CNPJ_sacado\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o CNPJ do sacado.\"\n    },\n    \"endereco_fatura\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o endereço completo do destinatário/sacado conforme consta na fatura, no formato: Logradouro, Número, Complemento (se houver), Bairro, CEP, Cidade, UF.\"\n    },\n    \"endereco_instalacao\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne o endereço do local de instalação ou entrega somente se estiver explicitamente destacado no documento como 'Endereço de Instalação', 'Local de Entrega' ou similar, no formato: Logradouro, Número, Complemento (se houver), Bairro, CEP, Cidade, UF. Se não houver, retorne null.\"\n    },\n    \"numero_fatura/numero NF\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o número do documento seguindo esta prioridade: 1) Se existir o campo 'Número da Fatura' ou 'Nº da Fatura', retorne esse valor. 2) Se não existir, retorne o número identificado como 'NOTA FISCAL Nº', 'Nº NFCOM' ou similar. Ignore campos chamados 'Código', 'Número da Conta', 'Nosso Número', 'Número Doc.', 'Número do Documento' e qualquer número associado ao boleto bancário.\"\n    },\n    \"emissao\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a data de emissão.\"\n    },\n    \"valor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o valor total a pagar.\"\n    },\n    \"vencimento\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a data de vencimento.\"\n    },\n    \"referencia\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne a referência quando estiver destacada na fatura ou nota.\"\n    },\n    \"contrato\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne o contrato quando estiver destacado na fatura ou nota.\"\n    },\n    \"codigo_barra\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne apenas os números do código de barras da fatura quando estiver presente.\"\n    }\n  },\n  \"required\": [\n    \"CNPJ_fornecedor\",\n    \"razao_social_fornecedor\",\n    \"razao_social_sacado\",\n    \"CNPJ_sacado\",\n    \"endereco_fatura\",\n    \"numero_fatura\",\n    \"emissao\",\n    \"valor\",\n    \"vencimento\",\n    \"contrato\",\n    \"referencia\",\n    \"contrato\",\n    \"codigo_barra\"\n  ]\n}",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"tipo_doc\": {\n  \"type\": \"string\",\n  \"enum\": [\"boleto\", \"nota_fiscal\", \"fatura\", \"fatura/boleto\"],\n  \"description\": \"Analise TODAS as páginas do documento e classifique: 1) 'boleto' se o documento inteiro for apenas um boleto bancário com linha digitável, sem outras páginas com detalhamento de serviços ou nota fiscal. 2) 'nota_fiscal' se o documento inteiro for apenas uma nota fiscal ou nota de débito, sem linha digitável bancária. 3) 'fatura' se o documento for apenas uma cobrança de serviços sem linha digitável e sem nota fiscal. 4) 'fatura/boleto' se o documento se identificar explicitamente como fatura (ex: 'FATURA UNIFICADA', 'SUA FATURA', 'FATURA DETALHADA') em uma ou mais páginas E contiver boleto com linha digitável como forma de pagamento. 5) 'nota_fiscal/boleto' se a primeira página for exclusivamente um boleto bancário avulso E a segunda página for uma nota fiscal ou NFCom separada, sem o documento se identificar como fatura.\"\n},\n    \"CNPJ_fornecedor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o CNPJ do fornecedor.\"\n    },\n    \"razao_social_fornecedor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a razão social do fornecedor.\"\n    },\n    \"razao_social_sacado\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a razão social do sacado (Inbrands ou Tommy).\"\n    },\n    \"CNPJ_sacado\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o CNPJ do sacado.\"\n    },\n    \"endereco_fatura\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o endereço completo do destinatário/sacado conforme consta na fatura, no formato: Logradouro, Número, Complemento (se houver), Bairro, CEP, Cidade, UF.\"\n    },\n    \"endereco_instalacao\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne o endereço do local de instalação ou entrega somente se estiver explicitamente destacado no documento como 'Endereço de Instalação', 'Local de Entrega' ou similar, no formato: Logradouro, Número, Complemento (se houver), Bairro, CEP, Cidade, UF. Se não houver, retorne null.\"\n    },\n    \"numero_fatura/numero NF\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o número do documento seguindo esta prioridade: 1) Se existir o campo 'Número da Fatura' ou 'Nº da Fatura', retorne esse valor. 2) Se não existir, retorne o número identificado como 'NOTA FISCAL Nº', 'Nº NFCOM' ou similar. Ignore campos chamados 'Código', 'Número da Conta', 'Nosso Número', 'Número Doc.', 'Número do Documento' e qualquer número associado ao boleto bancário.\"\n    },\n    \"emissao\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a data de emissão.\"\n    },\n    \"valor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o valor total a pagar.\"\n    },\n    \"vencimento\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a data de vencimento.\"\n    },\n    \"referencia\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne a referência quando estiver destacada na fatura ou nota.\"\n    },\n    \"contrato\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne o contrato quando estiver destacado na fatura ou nota.\"\n    },\n    \"codigo_barra\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne apenas os números do código de barras da fatura quando estiver presente.\"\n    }\n  },\n  \"required\": [\n    \"tipo_doc\",\n    \"CNPJ_fornecedor\",\n    \"razao_social_fornecedor\",\n    \"razao_social_sacado\",\n    \"CNPJ_sacado\",\n    \"endereco_fatura\",\n    \"numero_fatura\",\n    \"emissao\",\n    \"valor\",\n    \"vencimento\",\n    \"contrato\",\n    \"referencia\",\n    \"contrato\",\n    \"codigo_barra\"\n  ]\n}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.informationExtractor",
@@ -367,7 +367,10 @@
       "parameters": {
         "rule": {
           "interval": [
-            {}
+            {
+              "field": "minutes",
+              "minutesInterval": 3
+            }
           ]
         }
       },
@@ -396,6 +399,7 @@
     {
       "parameters": {
         "operation": "pdf",
+        "binaryPropertyName": "={{ $node[\"Loop Over Items\"].binary.data }}",
         "options": {
           "password": "15505"
         }
@@ -431,8 +435,8 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1.1,
       "position": [
-        2832,
-        672
+        2800,
+        480
       ],
       "id": "c419211d-e909-4d46-8cd7-d6f40be223c1",
       "name": "Read/Write Files from Disk1"
@@ -465,6 +469,19 @@
       ],
       "id": "94c2f243-5862-4d9c-97c9-c9ca09af1880",
       "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "command": "=rm /files/naoLidos/'{{ $json[\"Nome do arquivo\"] }}'"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        3056,
+        672
+      ],
+      "id": "e638442b-c040-4d4a-8574-1626e2845f45",
+      "name": "Execute Command"
     }
   ],
   "pinData": {},
@@ -602,7 +619,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items",
+            "node": "Execute Command",
             "type": "main",
             "index": 0
           }
@@ -619,6 +636,17 @@
           }
         ]
       ]
+    },
+    "Execute Command": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -626,7 +654,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "6fc76cdd-0dab-4b19-aec6-be7759143971",
+  "versionId": "19aaf0fe-d34d-497e-bcd1-912e52c888cf",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "1e7948feed7ad6a9d739915ed2a5fb1a4448b6865bf0a3749eb9703dbe25ec1f"
