@@ -11,10 +11,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1.1,
       "position": [
-        896,
-        480
+        416,
+        0
       ],
-      "id": "c54d6c5f-e760-43c6-8677-d6125ac2e41c",
+      "id": "9044c084-48b1-4d76-8400-703a5088e46d",
       "name": "Extract from File",
       "onError": "continueErrorOutput"
     },
@@ -22,16 +22,16 @@
       "parameters": {
         "text": "={{ $json.text }}",
         "schemaType": "manual",
-        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"tipo_doc\": {\n  \"type\": \"string\",\n  \"enum\": [\"boleto\", \"nota_fiscal\", \"fatura\", \"fatura/boleto\"],\n  \"description\": \"Analise TODAS as páginas do documento e classifique: 1) 'boleto' se o documento inteiro for apenas um boleto bancário com linha digitável, sem outras páginas com detalhamento de serviços ou nota fiscal. 2) 'nota_fiscal' se o documento inteiro for apenas uma nota fiscal ou nota de débito, sem linha digitável bancária. 3) 'fatura' se o documento for apenas uma cobrança de serviços sem linha digitável e sem nota fiscal. 4) 'fatura/boleto' se o documento se identificar explicitamente como fatura (ex: 'FATURA UNIFICADA', 'SUA FATURA', 'FATURA DETALHADA') em uma ou mais páginas E contiver boleto com linha digitável como forma de pagamento. 5) 'nota_fiscal/boleto' se a primeira página for exclusivamente um boleto bancário avulso E a segunda página for uma nota fiscal ou NFCom separada, sem o documento se identificar como fatura.\"\n},\n    \"CNPJ_fornecedor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o CNPJ do fornecedor.\"\n    },\n    \"razao_social_fornecedor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a razão social do fornecedor.\"\n    },\n    \"razao_social_sacado\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a razão social do sacado (Inbrands ou Tommy).\"\n    },\n    \"CNPJ_sacado\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o CNPJ do sacado.\"\n    },\n    \"endereco_fatura\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o endereço completo do destinatário/sacado conforme consta na fatura, no formato: Logradouro, Número, Complemento (se houver), Bairro, CEP, Cidade, UF.\"\n    },\n    \"endereco_instalacao\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne o endereço do local de instalação ou entrega somente se estiver explicitamente destacado no documento como 'Endereço de Instalação', 'Local de Entrega' ou similar, no formato: Logradouro, Número, Complemento (se houver), Bairro, CEP, Cidade, UF. Se não houver, retorne null.\"\n    },\n    \"numero_fatura/numero NF\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o número do documento seguindo esta prioridade: 1) Se existir o campo 'Número da Fatura' ou 'Nº da Fatura', retorne esse valor. 2) Se não existir, retorne o número identificado como 'NOTA FISCAL Nº', 'Nº NFCOM' ou similar. Ignore campos chamados 'Código', 'Número da Conta', 'Nosso Número', 'Número Doc.', 'Número do Documento' e qualquer número associado ao boleto bancário.\"\n    },\n    \"emissao\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a data de emissão.\"\n    },\n    \"valor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o valor total a pagar.\"\n    },\n    \"vencimento\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a data de vencimento.\"\n    },\n    \"referencia\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne a referência quando estiver destacada na fatura ou nota.\"\n    },\n    \"contrato\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne o contrato quando estiver destacado na fatura ou nota.\"\n    },\n    \"codigo_barra\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne apenas os números do código de barras da fatura quando estiver presente.\"\n    }\n  },\n  \"required\": [\n    \"tipo_doc\",\n    \"CNPJ_fornecedor\",\n    \"razao_social_fornecedor\",\n    \"razao_social_sacado\",\n    \"CNPJ_sacado\",\n    \"endereco_fatura\",\n    \"numero_fatura\",\n    \"emissao\",\n    \"valor\",\n    \"vencimento\",\n    \"contrato\",\n    \"referencia\",\n    \"contrato\",\n    \"codigo_barra\"\n  ]\n}",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"tipo_doc\": {\n  \"type\": \"string\",\n  \"enum\": [\"boleto\", \"nota_fiscal\", \"fatura\", \"fatura/boleto\"],\n  \"description\": \"Analise TODAS as páginas do documento e classifique: 1) 'boleto' se o documento inteiro for apenas um boleto bancário com linha digitável, sem outras páginas com detalhamento de serviços ou nota fiscal. 2) 'nota_fiscal' se o documento inteiro for apenas uma nota fiscal ou nota de débito, sem linha digitável bancária. 3) 'fatura' se o documento for apenas uma cobrança de serviços sem linha digitável e sem nota fiscal. 4) 'fatura/boleto' se o documento se identificar explicitamente como fatura (ex: 'FATURA UNIFICADA', 'SUA FATURA', 'FATURA DETALHADA') em uma ou mais páginas E contiver boleto com linha digitável como forma de pagamento. 5) 'nota_fiscal/boleto' se a primeira página for exclusivamente um boleto bancário avulso E a segunda página for uma nota fiscal ou NFCom separada, sem o documento se identificar como fatura.\"\n},\n    \"CNPJ_fornecedor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o CNPJ do fornecedor.\"\n    },\n    \"razao_social_fornecedor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a razão social do fornecedor.\"\n    },\n    \"razao_social_sacado\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a razão social do sacado (Inbrands ou Tommy).\"\n    },\n    \"CNPJ_sacado\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o CNPJ do sacado.\"\n    },\n    \"endereco_fatura\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o endereço completo do destinatário/sacado conforme consta na fatura, no formato: Logradouro, Número, Complemento (se houver), Bairro, CEP, Cidade, UF.\"\n    },\n    \"endereco_instalacao\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne o endereço do local de instalação ou entrega somente se estiver explicitamente destacado no documento como 'Endereço de Instalação', 'Local de Entrega' ou similar, no formato: Logradouro, Número, Complemento (se houver), Bairro, CEP, Cidade, UF. Se não houver, retorne null.\"\n    },\n    \"numero_fatura/numero NF\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o número do documento seguindo esta prioridade: 1) Se existir o campo 'Número da Fatura' ou 'Nº da Fatura', retorne esse valor. 2) Se não existir, retorne o número identificado como 'NOTA FISCAL Nº', 'Nº NFCOM' ou similar. Ignore campos chamados 'Código', 'Número da Conta', 'Nosso Número', 'Número Doc.', 'Número do Documento' e qualquer número associado ao boleto bancário.\"\n    },\n    \"emissao\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a data de emissão.\"\n    },\n    \"valor\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne o valor total a pagar.\"\n    },\n    \"vencimento\": {\n      \"type\": \"string\",\n      \"description\": \"Retorne a data de vencimento.\"\n    },\n    \"referencia\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne a referência quando estiver destacada na fatura ou nota.\"\n    },\n    \"contrato\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne o contrato quando estiver destacado na fatura ou nota.\"\n    },\n    \"codigo_barra\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Retorne apenas os números do código de barras da fatura quando estiver presente.\"\n    }\n  },\n  \"required\": [\n    \"tipo_doc\",\n    \"CNPJ_fornecedor\",\n    \"razao_social_fornecedor\",\n    \"razao_social_sacado\",\n    \"CNPJ_sacado\",\n    \"endereco_fatura\",\n    \"numero_fatura\",\n    \"emissao\",\n    \"valor\",\n    \"vencimento\",\n    \"contrato\",\n    \"referencia\",\n    \"contrato\"\n  ]\n}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.informationExtractor",
       "typeVersion": 1.2,
       "position": [
-        1568,
-        480
+        1088,
+        0
       ],
-      "id": "7190947f-ebc8-48ec-8add-4893fe1cb133",
+      "id": "2f096766-c0a0-4ac5-9ad3-a63e937298af",
       "name": "Information Extractor"
     },
     {
@@ -41,14 +41,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        1648,
-        704
+        1008,
+        192
       ],
-      "id": "6c6f4b83-0149-4530-9dfc-0ef9abb1adf0",
+      "id": "aa6b7abe-0ce7-4181-958e-4bcf47463705",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "fI1w759unI7eXoch",
+          "id": "PWue6OTmm868MBhI",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -148,10 +148,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1920,
-        480
+        1440,
+        0
       ],
-      "id": "6a83e9a5-a38a-4d67-8cbf-cbf316ef4996",
+      "id": "b2b80e62-3ccc-4e01-a810-07ba7db22f63",
       "name": "Edit Fields1"
     },
     {
@@ -326,14 +326,14 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2384,
-        480
+        1904,
+        0
       ],
-      "id": "1cd0cc9d-9a0d-4123-885a-8af7209d85d2",
+      "id": "fe6d318c-514c-410f-b7c7-45bb248443e9",
       "name": "Append row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "VTPodq2TM8NkUoYY",
+          "id": "pYNJtsCw8pOpm1uG",
           "name": "Google Sheets account"
         }
       }
@@ -343,10 +343,10 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        2144,
-        480
+        1664,
+        0
       ],
-      "id": "0054773d-4430-4413-9686-f255cc828aed",
+      "id": "b7c70fcd-9ba0-4ee5-ac45-208a504a3c6b",
       "name": "Limit"
     },
     {
@@ -357,10 +357,10 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1.1,
       "position": [
-        432,
-        608
+        -16,
+        128
       ],
-      "id": "d3461cb7-50f5-44c4-8038-2a3d11fbe871",
+      "id": "8eb094dc-e0cf-414f-a9ac-bf66b2b8d811",
       "name": "Read/Write Files from Disk"
     },
     {
@@ -377,10 +377,10 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        224,
-        608
+        -224,
+        128
       ],
-      "id": "88996853-5b44-436b-b8bf-18cd8107d4df",
+      "id": "9e2ffd08-c3cc-4ca3-a25a-39445a0b7a4d",
       "name": "Schedule Trigger"
     },
     {
@@ -390,16 +390,16 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        672,
-        608
+        192,
+        128
       ],
-      "id": "732607c2-ef43-4e43-a79a-9bfa1d22c712",
+      "id": "63d5395b-8fb2-4893-8ed2-d1870323d4b8",
       "name": "Loop Over Items"
     },
     {
       "parameters": {
         "operation": "pdf",
-        "binaryPropertyName": "={{ $node[\"Loop Over Items\"].binary.data }}",
+        "binaryPropertyName": "={{ $(\"Loop Over Items\").item.binary.data }}",
         "options": {
           "password": "15505"
         }
@@ -407,10 +407,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1.1,
       "position": [
-        1120,
-        560
+        640,
+        80
       ],
-      "id": "91e0d7c7-f8fc-4872-b18c-707eabfcb273",
+      "id": "ae7eebf9-7055-42c8-8a9d-dc857ca81a7d",
       "name": "Extract from File1"
     },
     {
@@ -418,43 +418,159 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1344,
-        480
+        864,
+        0
       ],
-      "id": "30423803-06c7-49f4-8fc2-85b52a3a5904",
+      "id": "a126e65e-7e5e-47e2-8235-df8e9f4f98d0",
       "name": "Merge"
     },
     {
       "parameters": {
-        "operation": "write",
-        "fileName": "=/files/lidos/{{ $json['Nome do arquivo'] }}",
-        "options": {
-          "append": false
-        }
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "02558",
+                    "rightValue": "={{ $('Edit Fields2').item.json['Prefixo cnpj'] }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "08c6a8f1-5f44-42b7-b2e8-94bd3f920e9c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Operadora X"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "46876734-86ca-47c6-b103-7fc1acb6af29",
+                    "leftValue": "66970",
+                    "rightValue": "={{ $('Edit Fields2').item.json['Prefixo cnpj'] }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Operadora Y"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "b7dced60-d15d-468f-8421-afc4e362e881",
+                    "leftValue": "31748",
+                    "rightValue": "={{ $('Edit Fields2').item.json['Prefixo cnpj'] }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Operadora Z"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "87f99a65-77c5-488b-9ff7-de1eddb40ecd",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Operadora não mapeada"
+            }
+          ]
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.readWriteFile",
-      "typeVersion": 1.1,
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
       "position": [
-        2800,
-        480
+        2528,
+        -32
       ],
-      "id": "c419211d-e909-4d46-8cd7-d6f40be223c1",
-      "name": "Read/Write Files from Disk1"
+      "id": "421a48bd-c5e1-4919-aab6-4a2abb1d067c",
+      "name": "Switch"
     },
     {
       "parameters": {
         "assignments": {
           "assignments": [
             {
-              "id": "acda8add-3a5d-4fb7-ad2e-b443eb986d6a",
-              "name": "data",
-              "value": "={{ $node[\"Loop Over Items\"].binary.data }}",
-              "type": "binary"
+              "id": "b2fc9fb3-abda-44bb-ba32-0b589f8944e2",
+              "name": "Prefixo cnpj",
+              "value": "={{ $json['CNPJ fornecedor'].slice(0,6).replace(\".\", \"\") }}",
+              "type": "string"
             },
             {
-              "id": "1d64fb04-160e-4755-a60e-4dcc47067b34",
+              "id": "de837890-5040-4449-bd19-f81b9dbb949b",
               "name": "Nome do arquivo",
               "value": "={{ $('Read/Write Files from Disk').item.json.fileName }}",
+              "type": "string"
+            },
+            {
+              "id": "2aa5551b-24c3-4e92-ade6-223d22418d53",
+              "name": "Novo nome do arquivo ",
+              "value": "={{ $('Edit Fields1').item.json.tipo_doc.toSentenceCase().replaceAll(\"/\", \" - \") }} - R$ {{ $('Edit Fields1').item.json.valor }} - venc {{ $('Edit Fields1').item.json.vencimento.replaceAll(\"/\", \".\") + \".pdf\" }}",
+              "type": "string"
+            },
+            {
+              "id": "63b51806-f49d-4c10-b4b5-cef5d2b4e103",
+              "name": "Ano",
+              "value": "={{ $('Edit Fields1').item.json.vencimento.split(\"/\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "fd9e998d-db97-4650-84c9-9de92a78ab4f",
+              "name": "Mês",
+              "value": "={{ $('Edit Fields1').item.json.vencimento.split(\"/\")[1] }}",
               "type": "string"
             }
           ]
@@ -464,24 +580,174 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2592,
-        480
+        2112,
+        0
       ],
-      "id": "94c2f243-5862-4d9c-97c9-c9ca09af1880",
+      "id": "44b94633-d116-42c6-866e-d6e2ea8cbef5",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acda8add-3a5d-4fb7-ad2e-b443eb986d6a",
+              "name": "data",
+              "value": "={{ $(\"Loop Over Items\").item.binary.data }}",
+              "type": "binary"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2912,
+        112
+      ],
+      "id": "6e4ee66a-3ee2-46f1-88b8-6b834160e4da",
       "name": "Edit Fields"
     },
     {
       "parameters": {
-        "command": "=rm /files/naoLidos/'{{ $json[\"Nome do arquivo\"] }}'"
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acda8add-3a5d-4fb7-ad2e-b443eb986d6a",
+              "name": "data",
+              "value": "={{ $(\"Loop Over Items\").item.binary.data }}",
+              "type": "binary"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2912,
+        -128
+      ],
+      "id": "7cdd6fe9-1a98-474f-9378-d0a88d8c6d19",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acda8add-3a5d-4fb7-ad2e-b443eb986d6a",
+              "name": "data",
+              "value": "={{ $(\"Loop Over Items\").item.binary.data }}",
+              "type": "binary"
+            },
+            {
+              "id": "0a4e15d0-e276-45a5-a519-b40799f1b184",
+              "name": "Ano",
+              "value": "={{ $('Edit Fields1').item.json.vencimento }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2912,
+        -336
+      ],
+      "id": "a89baed2-9511-4410-9181-4f8049189d55",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acda8add-3a5d-4fb7-ad2e-b443eb986d6a",
+              "name": "data",
+              "value": "={{ $(\"Loop Over Items\").item.binary.data }}",
+              "type": "binary"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2912,
+        336
+      ],
+      "id": "6e5bfd4c-5f35-413b-8e00-032a3318c0f8",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "command": "=mkdir -p \"/files/Operadora_nao_mapeada/{{ $('Edit Fields2').item.json.Ano }}/{{ $('Edit Fields2').item.json.Mês }}\" && mv \"/files/naoLidos/{{ $('Edit Fields2').item.json['Novo nome do arquivo '] }}\" \"/files/Operadora_nao_mapeada/{{ $('Edit Fields2').item.json.Ano }}/{{ $('Edit Fields2').item.json.Mês }}/{{ $('Edit Fields2').item.json['Novo nome do arquivo '] }}\""
       },
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        3056,
-        672
+        3120,
+        336
       ],
-      "id": "e638442b-c040-4d4a-8574-1626e2845f45",
-      "name": "Execute Command"
+      "id": "47c35ab3-6489-44c3-b5a1-f35a4e24c006",
+      "name": "Execute Command4"
+    },
+    {
+      "parameters": {
+        "command": "=mkdir -p \"/files/Operadora_Z/{{ $('Edit Fields2').item.json.Ano }}/{{ $('Edit Fields2').item.json.Mês }}\" && mv \"/files/naoLidos/{{ $('Edit Fields2').item.json['Novo nome do arquivo '] }}\" \"/files/Operadora_Z/{{ $('Edit Fields2').item.json.Ano }}/{{ $('Edit Fields2').item.json.Mês }}/{{ $('Edit Fields2').item.json['Novo nome do arquivo '] }}\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        112
+      ],
+      "id": "1cecf7ab-634a-4564-b66d-fc5947b0a502",
+      "name": "Execute Command5"
+    },
+    {
+      "parameters": {
+        "command": "=mkdir -p \"/files/Operadora_Y/{{ $('Edit Fields2').item.json.Ano }}/{{ $('Edit Fields2').item.json.Mês }}\" && mv \"/files/naoLidos/{{ $('Edit Fields2').item.json['Novo nome do arquivo '] }}\" \"/files/Operadora_Y/{{ $('Edit Fields2').item.json.Ano }}/{{ $('Edit Fields2').item.json.Mês }}/{{ $('Edit Fields2').item.json['Novo nome do arquivo '] }}\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        3136,
+        -128
+      ],
+      "id": "311ed921-d138-4360-8a3e-c66b176b39a6",
+      "name": "Execute Command6"
+    },
+    {
+      "parameters": {
+        "command": "=mkdir -p \"/files/Operadora_X/{{ $('Edit Fields2').item.json.Ano }}/{{ $('Edit Fields2').item.json.Mês }}\" && mv \"/files/naoLidos/{{ $('Edit Fields2').item.json['Novo nome do arquivo '] }}\" \"/files/Operadora_X/{{ $('Edit Fields2').item.json.Ano }}/{{ $('Edit Fields2').item.json.Mês }}/{{ $('Edit Fields2').item.json['Novo nome do arquivo '] }}\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        3136,
+        -336
+      ],
+      "id": "b20e275c-dac6-4bce-9e4c-6a3de72960dc",
+      "name": "Execute Command7"
+    },
+    {
+      "parameters": {
+        "command": "=mv '/files/naoLidos/{{ $json[\"Nome do arquivo\"] }}' '/files/naoLidos/{{ $json[\"Novo nome do arquivo \"] }}'\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        2320,
+        0
+      ],
+      "id": "35b881aa-855a-4a9b-a05b-31371bb9dbac",
+      "name": "Execute Command8"
     }
   ],
   "pinData": {},
@@ -586,7 +852,7 @@
       "main": [
         [
           {
-            "node": "Edit Fields",
+            "node": "Edit Fields2",
             "type": "main",
             "index": 0
           }
@@ -615,11 +881,43 @@
         ]
       ]
     },
-    "Read/Write Files from Disk1": {
+    "Edit Fields2": {
       "main": [
         [
           {
-            "node": "Execute Command",
+            "node": "Execute Command8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields5",
             "type": "main",
             "index": 0
           }
@@ -630,18 +928,95 @@
       "main": [
         [
           {
-            "node": "Read/Write Files from Disk1",
+            "node": "Execute Command5",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Execute Command": {
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Execute Command6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Execute Command7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Execute Command4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command4": {
       "main": [
         [
           {
             "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command6": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command7": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command8": {
+      "main": [
+        [
+          {
+            "node": "Switch",
             "type": "main",
             "index": 0
           }
@@ -652,13 +1027,21 @@
   "active": false,
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate"
+    "binaryMode": "separate",
+    "availableInMCP": false
   },
-  "versionId": "19aaf0fe-d34d-497e-bcd1-912e52c888cf",
+  "versionId": "21a4d79b-7db6-4bed-a02b-9a0f3e325117",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "1e7948feed7ad6a9d739915ed2a5fb1a4448b6865bf0a3749eb9703dbe25ec1f"
+    "instanceId": "2efdf59d22b01f5b3cc02c6e5343efb0018294d35df8715600aeda534f49f95d"
   },
-  "id": "OMTuM1fCXTW1ldDc",
-  "tags": []
+  "id": "RAatdSnpjs2B7T6QHgwWf",
+  "tags": [
+    {
+      "updatedAt": "2026-03-19T02:29:38.752Z",
+      "createdAt": "2026-03-19T02:29:38.752Z",
+      "id": "VXmXc4hnWGXCVDOT",
+      "name": "Faturas TI"
+    }
+  ]
 }
