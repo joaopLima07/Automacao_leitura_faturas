@@ -1,0 +1,382 @@
+{
+  "name": "Projeto faturas/Filtragem e-mail",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "q": "{from: joaopedro.mlima9@gmail.com from: ademilson.com.br} ",
+          "readStatus": "unread"
+        },
+        "options": {
+          "dataPropertyAttachmentsPrefixName": "data_",
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        0
+      ],
+      "id": "64a73dd0-1255-456e-b3ff-5fa941083164",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KXRxpeKrrQda1PrL",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e956dfc3-0747-4deb-a3bf-06423a36beb3",
+              "name": "data",
+              "value": "={{ $binary.data_0 }}",
+              "type": "binary"
+            },
+            {
+              "id": "290d17b3-b451-49a2-9f78-6d42f54ea622",
+              "name": "nomeArquivo",
+              "value": "={{ $binary.data_0.fileName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        912,
+        -160
+      ],
+      "id": "67b918a4-10e4-4475-89e5-7b9443329411",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "custom": "from/emailAddress/address eq 'joaopedro.mlima9@gmail.com' or from/emailAddress/address eq 'ademilson.lima@uol.com.br'",
+          "hasAttachments": true,
+          "readStatus": "unread"
+        },
+        "options": {
+          "attachmentsPrefix": "data",
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTrigger",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        384
+      ],
+      "id": "defb44d1-494b-4c9a-942e-98b5a4f94c99",
+      "name": "Microsoft Outlook Trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0091cfda-dcab-4d91-b447-5feeb3ca4948",
+              "leftValue": "={{ $('Gmail Trigger').item.binary.data_0.fileExtension }}",
+              "rightValue": "pdf",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f244af19-2b2e-4b8b-97fd-aba15338d2eb",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/files/naoLidos/{{ $binary.data.fileName }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        -160
+      ],
+      "id": "6d54f31e-da55-48dc-b873-92c6313123c9",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        32,
+        0
+      ],
+      "id": "abfb1c29-02fc-48b6-ab4a-a83beb99b917",
+      "name": "Mark a message as read",
+      "webhookId": "22f36362-8af0-4f49-a4c1-c67d5200e774",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KXRxpeKrrQda1PrL",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Esse ele ja marca automaticamente o e-mail como lido\n\n",
+        "height": 288,
+        "width": 272,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        256
+      ],
+      "id": "502273ed-c255-49d1-b4ad-f69775a92b86",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## O gmail ele tem um processo diferente que tem que ler o e-mail a parte\n",
+        "height": 288,
+        "width": 352,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        -128
+      ],
+      "id": "0f478e13-fdb0-4804-9794-24290ee1dfd2",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c7bd63b1-faa3-4451-93af-1c78ab2c27a1",
+              "leftValue": "=",
+              "rightValue": "BOLETO",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "b7138783-0e87-495d-be58-c5b21d2ed93e",
+              "leftValue": "",
+              "rightValue": "NOTA FISCAL",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "22c96fa9-3360-4929-956f-b546869a11b7",
+              "leftValue": "",
+              "rightValue": "FATURA",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        656,
+        -16
+      ],
+      "id": "26a4f2cf-37cf-4a82-b010-8d6c03d706b7",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "content": "# Caso tenha mais de 1 arquivo por e-mail terá que colocar um loop\n",
+        "width": 560,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        208,
+        -256
+      ],
+      "id": "c331f73f-022d-44b6-a4e1-767deb307dd6",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "resource": "document",
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "text": "Analise o documento enviado e classifique em uma das categorias:\n- NOTA_FISCAL\n- BOLETO\n- FATURA\n\nResponda APENAS com uma dessas três palavras exatas, sem explicações, sem pontuação.",
+        "inputType": "binary",
+        "simplify": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -16
+      ],
+      "id": "c9ee2c2e-020f-45b6-be28-9b40328c4816",
+      "name": "Analisa documento para ver se e valido"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Mark a message as read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Analisa documento para ver se e valido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        []
+      ]
+    },
+    "Mark a message as read": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analisa documento para ver se e valido": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7e2e84d9-81a1-4168-98f5-aad95a32d765",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1e7948feed7ad6a9d739915ed2a5fb1a4448b6865bf0a3749eb9703dbe25ec1f"
+  },
+  "id": "Bvxf2Am0ZXinW036",
+  "tags": [
+    {
+      "updatedAt": "2026-05-14T22:20:12.454Z",
+      "createdAt": "2026-05-14T22:20:12.454Z",
+      "id": "G2bG9kzU5OiftGX7",
+      "name": "Faturas TI"
+    }
+  ]
+}
